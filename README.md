@@ -1,8 +1,8 @@
-# API Survey - Firebase Messaging
+# Laravel 台灣社群活動
 
-* What is FCM ?
-* The API for Push Notification
-* The API for Topic Registration
-* The API for Retrieving User's Data
-* Compare the Design of FCM API to RESTful API 
-    * Pros and Cons
+## Laradebut #7
+
+- Authentication 架構介紹
+- 使用 Laravel 架設 Server Based Authentication
+- 使用 Laravel 架設 Token Based Authentication
+
