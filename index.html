@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Laradebut #7 - Laravel Auth</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen-16x10.css">
+</head>
+<body class="shower list">
+	<header class="caption">
+		<h1>Laradebut #7 - Laravel Auth</h1>
+		<p>Cara Wang &lt;caraw@cnyes.com&gt;</p>
+	</header>
+	<section class="slide" id="cover">
+		<h2>Laradebut #7</h2>
+		<h3>會員系統 Authentication</h3>
+		<div class="author">
+			<p>@author Cara Wang &lt;caraw@cnyes.com&gt;</p>
+			<p>@since 2017/03/28</p>
+		</div>
+		<img src="pictures/cover.jpg" class="cover">
+		<style>
+			#cover h2 {
+				margin: 14% 0 0;
+				padding: 10px;
+				color:#f0fcfe;
+				text-align:center;
+				font-size:60px;
+				border-width: 5px;
+				border-color: #f0fcfe;
+				border-top-style: solid;
+				border-bottom-style: solid;
+				}
+			#cover h3 {
+				margin: 18% 0 0;
+				color:#f0fcfe;
+				text-align:center;
+				font-size:30px;
+				}
+			.author {
+				margin:10px 230px 0;
+				color:#f0fcfe;
+				font-style:italic;
+				font-size:20px;
+				}
+				.author p {
+					line-height: 10px;
+					text-align:left;
+					}
+				.author p a {
+					color:#f0fcfe;
+					}
+			#cover img {
+				opacity: 0.9;
+			}
+		</style>
+	</section>
+	<section class="slide">
+		<img src="pictures/cara.png" class="place left">
+		<div class="authorDesc">
+			<h2>PHP Developer</h2>
+			<ol>
+				<li class="next">2014/09 ~ now</li>
+			</ol>
+		</div>
+		<style>
+			.authorDesc {
+				margin-left: 445px;
+			}
+		</style>
+	</section>
+	<section class="slide">
+		<h2>會員系統要素</h2>
+		<li class="next">註冊</li>
+		<li class="next">登入 / 登出</li>
+		<li class="next">記得我</li>
+	</section>
+	<section class="slide">
+		<h2>兩種架構</h2>
+		<ol>
+			<li class="next">
+				Server Based Authentication
+			</li>
+		</ol>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_1.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_2.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_3.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionRequest_1.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication - 其他 Request 需要驗證登入狀況時
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionRequest_2.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication - 其他 Request 需要驗證登入狀況時
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionRequest_3.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication - 其他 Request 需要驗證登入狀況時
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h2>兩種架構</h2>
+		<ol>
+			<li>
+				Server Based Authentication
+				<ol>
+					<li class="next">單靠後端操作使用者的登入狀況</li>
+					<li class="next">使用 Session 記錄使用者登入狀況</li>
+					<li class="next">適合用在目標客戶只有瀏覽器的產品</li>
+				</ol>
+			</li>
+		</ol>
+		<ol>
+			<li class="next">
+				Token Based Authentication
+			</li>
+		</ol>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiLogin_1.jpg">
+		    <figcaption class="black">
+		        Token Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiLogin_2.jpg">
+		    <figcaption class="black">
+		        Token Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiRequest_1.jpg">
+		    <figcaption class="black">
+		        Token Based Authentication - 其他 Request 需要驗證登入狀況時
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiRequest_2.jpg">
+		    <figcaption class="black">
+		        Token Based Authentication - 其他 Request 需要驗證登入狀況時
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h2>兩種架構</h2>
+		<ol>
+			<li>
+				Server Based Authentication
+				<ol>
+					<li>單靠後端操作使用者的登入狀況</li>
+					<li>使用 Session 與 Cookies 記錄使用者登入狀況</li>
+					<li>適合用在目標客戶只有瀏覽器的產品</li>
+				</ol>
+			</li>
+		</ol>
+		<ol>
+			<li>
+				Token Based Authentication
+				<ol>
+					<li class="next">前後端合作操作使用者的登入狀況</li>
+					<li class="next">需要處理 API Header 溝通使用者登入狀況</li>
+					<li class="next">適合用在任何產品上，擴充容易</li>
+				</ol>
+			</li>
+		</ol>
+	</section>
+	<section class="slide">
+		<h2>兩種架構 - 實作會員系統要素的差異</h2>
+		<ol>
+			<li class="next">
+				註冊
+				<ol>
+					<li class="next">相同</li>
+				</ol>
+			</li>
+		</ol>
+		<ol>
+			<li class="next">
+				登入 / 註冊
+				<ol>
+					<li class="next">Server Based Authentication: <span class="next">後端利用 Session + Cookies 記錄使用者狀態</span></li>
+					<li class="next">Token Based Authentication: <span class="next">前端取得 Authorization Header 告知後端使用者狀態</span></li>
+				</ol>
+			</li>
+		</ol>
+		<style>
+			ol ol {
+				list-style-type: disc;
+			}
+			.slide ol ol>li::before {
+				content: '';
+			}
+		</style>
+	</section>
+	<section class="slide">
+		<h2>兩種架構 - 實作會員系統要素的差異</h2>
+		<ol>
+			<li class="next">
+				記住我
+				<ol>
+					<li class="next">Server Based Authentication: <span class="next">後端利用設定 TTL 長的 Cookies 記錄使用者狀態</span></li>
+					<li class="next">Token Based Authentication: <span class="next">前端定期做 Token Refresh</span></li>
+				</ol>
+			</li>
+		</ol>
+		<li class="next">程式示範: <mark>登入</mark> 和 <mark>記住我</mark></li>
+				<style>
+			ol ol {
+				list-style-type: disc;
+			}
+			.slide ol ol>li::before {
+				content: '';
+			}
+		</style>
+	</section>
+	<section class="slide">
+		<h3>聽起來很複雜...</h3>
+		<h2 class="next">Laravel 提供完整的 Server Based Authentication</h2>
+		<code class="next">php artisan make:auth</code><br />
+		<code class="next">php artisan serve</code>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/makeAuth.png">
+		    <figcaption class="black">
+				php artisan make:auth 後的 code change
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h3>聽起來很複雜...</h3>
+		<h2>Laravel 提供完整的 Server Based Authentication</h2>
+		<code>php artisan make:auth</code><br />
+		<code>php artisan serve</code><br />
+		<code class="next">php artisan migrate</code>
+	</section>
+	<section class="slide">
+		<img src="./pictures/error.png" class="cover">
+		<p style="margin-top: 450px;">如果你使用 Laravel 5.4 + MySQL 5.6 或以下版本</p>
+	</section>
+	<section class="slide">
+		<h2>如果你使用 Laravel 5.4 + MySQL 5.6 或以下版本</h2>
+		<pre class="next">
+			<code>namespace App\Providers;</code>
+			<code>use Illuminate\Support\Facades\Schema;</code>
+			<code>...</code>
+			<code>public function boot()</code>
+			<code>{</code>
+			<code>    Schema::defaultStringLength(191);</code>
+			<code>}</code>
+		</pre>
+		<p class="next"> Ref: <a href="https://laravel-news.com/laravel-5-4-key-too-long-error">https://laravel-news.com/laravel-5-4-key-too-long-error</a></p>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_1.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_sample_1.png">
+		    <figcaption class="black">
+		        Server Based Authentication - Laravel
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_2.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_sample_2.png">
+		    <figcaption class="black">
+		        Server Based Authentication - Laravel
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_3.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionLogin_sample_3.png">
+		    <figcaption class="black">
+		        Server Based Authentication - Laravel
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionRequest_3.jpg">
+		    <figcaption class="black">
+		        Server Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionRequest_sample_1.png">
+		    <figcaption class="black">
+		        Server Based Authentication - Laravel
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h2>記得我</h2>
+		<li class="next">多一個 TTL 很長的 cookies:</li>
+		<pre><code class="next">1|EWnGacWd8GnEUVdeeki0GLs70tjJCfb9jph2LkAbvkdTq0e8SHhA2L8mUWb0</code></pre>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionRemeber_1.png">
+		    <figcaption class="black">
+		        Server Based Authentication - Remember Me
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/sessionRemeber_2.png">
+		    <figcaption class="black">
+		        Server Based Authentication - Remember Me
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h2>Laravel 提供的 Token Based Authentication?</h2>
+		<p class="next"><a href="https://gistlog.co/JacobBennett/090369fbab0b31130b51">https://gistlog.co/JacobBennett/090369fbab0b31130b51</a></p>
+	</section>
+	<section class="slide">
+		<h2>Laravel 提供的 Token Based Authentication?</h2>
+		<pre>
+			<code>namespace App\Http\Controllers\Auth;</code>
+			<code>use Illuminate\Http\Request;</code>
+			<code>...</code>
+			<code>public function apiRegister(Request $request)</code>
+    		<code>{</code>
+        	<code>	$data = $request->json()->all();</code>
+        	<code>	$this->validator($data)->validate();</code>
+			<code> </code>
+			<code>	$data['token'] = str_random(20);</code>
+			<code>	$user = $this->create($data);</code>
+			<code> </code>
+			<code>	return response()->json(['token' => $data['token']]);</code>
+    		<code>}</code>
+		</pre>
+		<li class="next">Stateless ?</li>
+		<style>
+			.slide pre code {
+				font-size: 0.5em;
+			}
+		</style>
+	</section>
+	<section class="slide">
+		<h2>使用以下 Package:</h2>
+		<li>
+			<a href="https://github.com/tymondesigns/jwt-auth">tymondesigns/jwt-auth</a>
+		</li>
+		<pre class="next">
+			<code><mark>// 1. install package</mark></code>
+			<code>composer require tymon/jwt-auth</code>
+			<code><mark>// 2. modify config/app.php</mark></code>
+			<code>'providers' => [</code>
+			<code>	Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,</code>
+			<code>],</code>
+			<code>'aliases' => [</code>
+			<code>	'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,</code>
+			<code>],</code>
+			<code><mark>// 3. setup config</mark></code>
+			<code>php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\JWTAuthServiceProvider"</code>
+			<code>php artisan jwt:generate</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>撰寫 登入 機制</h2>
+		<pre class="next">
+			<code>namespace App\Http\Controllers\Auth;</code>
+			<code>use JWTAuth;</code>
+			<code>use Illuminate\Http\Request;</code>
+			<code> </code>
+			<code>class LoginController extends Controller</code>
+			<code>{</code>
+			<code>	public function apiLogin(Request $request)</code>
+    		<code>	{</code>
+        	<code>		$data = $request->json()->all();</code>
+        	<code>		$token = JWTAuth::attempt($data);</code>
+        	<code>		if (!$token) {</code>
+            <code>			return response()->json(['Invalid User']);</code>
+        	<code>		}</code>
+        	<code>		return response()->json(['token' => $token]);</code>
+    		<code>	}</code>
+    		<code>}</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>撰寫 登入 機制</h2>
+		<pre class="next">
+			<code>// route/api.php</code>
+			<code>Route::post('/login', 'Auth\LoginController@apiLogin');</code>
+		</pre>
+		<li class="next"><a href="https://jwt.io/">JWT</a></li>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiLogin_2.jpg">
+		    <figcaption class="black">
+		        Token Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiLogin_sample_1.png">
+		    <figcaption class="black">
+		        Token Based Authentication - Laravel
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h2>測試其他 Request</h2>
+		<pre class="next">
+			<code>// route/api.php</code>
+			<code>use Tymon\JWTAuth\Facades\JWTAuth;</code>
+			<code>Route::middleware('jwt')->get('/user', function (Request $request) {</code>
+			<code>	return JWTAuth::parseToken()->toUser();</code>
+			<code>});</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>撰寫 Middleware</h2>
+		<code>php artisam make:middle JWTAuthentication</code>
+		<pre class="next">
+			<code>namespace App\Http\Middleware;</code>
+			<code>use JWTAuth;</code>
+			<code>use Throwable;</code>
+			<code>class JWTAuthentication</code>
+			<code>{</code>
+			<code>	public function handle($request, Closure $next)</code>
+    		<code>	{</code>
+        	<code>		try {</code>
+        	<code>			JWTAuth::parseToken()->authenticate();</code>
+        	<code>		} catch (Throwable $error) {</code>
+        	<code>			return response()->json(['error' => $error->getMessage()]);</code>
+        	<code>		}</code>
+			<code> </code>
+        	<code>		return $next($request);</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiRequest_2.jpg">
+		    <figcaption class="black">
+		        Token Based Authentication
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiRequest_sample_1.png">
+		    <figcaption class="black">
+		        Token Based Authentication - Laravel
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h2>記得我</h2>
+		<li class="next">靠前端做 Token Refresh</li>
+		<pre class="next">
+			<code>// route/api.php</code>
+			<code>Route::post('/refresh', 'Auth\LoginController@refreshToken');</code>
+		</pre>
+		<pre class="next">
+			<code>public function refreshToken()</code>
+    		<code>{</code>
+			<code>	$newToken = JWTAuth::parseToken()->refresh();</code>
+        	<code>	return response()->json(['token' => $newToken]);</code>
+    		<code>}</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<figure>
+		    <img class="cover" src="./pictures/apiRemember_sample_1.png">
+		    <figcaption class="black">
+				Token Based Authentication - Remember Me
+		    </figcaption>
+		</figure>
+	</section>
+	<section class="slide">
+		<h2>如果都不想自己撰寫驗證程式</h2>
+		<ol><li class="next">
+			可以考慮使用
+			<ol>
+				<li class="next"><a href="https://firebase.google.com/docs/auth/">Firebase Authentication</a></li>
+				<li class="next"><a href="http://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html">AWS Cognito</a></li>
+				<li class="next"><a href="https://auth0.com/">Auth0</a></li>
+			</ol>
+		</li></ol>
+	</section>
+	<section class="slide" id="end">
+		<h2>Q & A</h2>
+		<img src="pictures/end.jpg" alt="" class="cover">
+		<!--
+			To apply styles to the certain slides
+			set slide ID to get needed elements
+			-->
+		<style>
+			#end h2 {
+				margin: 350px 0 0;
+				padding: 10px;
+				color:#DB2F13;
+				text-align:right;
+				font-size:60px;
+				}
+		</style>
+	</section>
+	<p class="badge">
+		<a href="">Fork me on GitHub</a>
+	</p>
+	<div class="progress"></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+</body>
+</html>
