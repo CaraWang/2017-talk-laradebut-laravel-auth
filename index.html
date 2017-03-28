@@ -211,10 +211,7 @@
 		<h2>兩種架構 - 實作會員系統要素的差異</h2>
 		<ol>
 			<li class="next">
-				註冊
-				<ol>
-					<li class="next">相同</li>
-				</ol>
+				註冊: <span class="next">相同</span>
 			</li>
 		</ol>
 		<ol>
@@ -246,6 +243,7 @@
 				</ol>
 			</li>
 		</ol>
+		<li class="next">其他: email 驗證 / 忘記密碼 等等...: <span class="next">相同</span></li>
 		<li class="next">程式示範: <mark>登入</mark> 和 <mark>記住我</mark></li>
 				<style>
 			ol ol {
@@ -289,7 +287,7 @@
 			<code>...</code>
 			<code>public function boot()</code>
 			<code>{</code>
-			<code>    Schema::defaultStringLength(191);</code>
+			<code>    <mark>Schema::defaultStringLength(191);</mark></code>
 			<code>}</code>
 		</pre>
 		<p class="next"> Ref: <a href="https://laravel-news.com/laravel-5-4-key-too-long-error">https://laravel-news.com/laravel-5-4-key-too-long-error</a></p>
@@ -394,10 +392,10 @@
         	<code>	$data = $request->json()->all();</code>
         	<code>	$this->validator($data)->validate();</code>
 			<code> </code>
-			<code>	$data['token'] = str_random(20);</code>
+			<code>	<mark>$data['token'] = str_random(20);</mark></code>
 			<code>	$user = $this->create($data);</code>
 			<code> </code>
-			<code>	return response()->json(['token' => $data['token']]);</code>
+			<code>	return response()->json(<mark>['token' => $data['token']]</mark>);</code>
     		<code>}</code>
 		</pre>
 		<li class="next">Stateless ?</li>
@@ -439,9 +437,9 @@
 			<code>	public function apiLogin(Request $request)</code>
     		<code>	{</code>
         	<code>		$data = $request->json()->all();</code>
-        	<code>		$token = JWTAuth::attempt($data);</code>
+        	<code>		<mark>$token = JWTAuth::attempt($data);</mark></code>
         	<code>		if (!$token) {</code>
-            <code>			return response()->json(['Invalid User']);</code>
+            <code>			return response()->json(['error' => 'Invalid User']);</code>
         	<code>		}</code>
         	<code>		return response()->json(['token' => $token]);</code>
     		<code>	}</code>
@@ -505,16 +503,12 @@
 		<pre class="next">
                     <code>namespace App\Http\Middleware;</code>
                     <code>use JWTAuth;</code>
-                    <code>use Throwable;</code>
+                    <code>   </code>
                     <code>class JWTAuthentication</code>
                     <code>{</code>
                     <code>    public function handle($request, Closure $next)</code>
                     <code>    {</code>
-                    <code>        try {</code>
-                    <code>            JWTAuth::parseToken()->authenticate();</code>
-                    <code>      } catch (Throwable $error) {</code>
-                    <code>          return response()->json(['error' => $error->getMessage()]);</code>
-                    <code>      }</code>
+                    <code>      <mark>JWTAuth::parseToken()->authenticate();</mark></code>
                     <code> </code>
                     <code>      return $next($request);</code>
                     <code>    }</code>
@@ -560,7 +554,7 @@
 		<pre class="next">
 			<code>public function refreshToken()</code>
     		<code>{</code>
-			<code>	$newToken = JWTAuth::parseToken()->refresh();</code>
+			<code>	<mark>$newToken = JWTAuth::parseToken()->refresh();</mark></code>
         	<code>	return response()->json(['token' => $newToken]);</code>
     		<code>}</code>
 		</pre>
@@ -574,7 +568,8 @@
 		</figure>
 	</section>
 	<section class="slide">
-		<h2>如果都不想自己撰寫驗證程式</h2>
+		<h3>聽起來好像很簡單!?</h3>
+		<h2 class="next">如果都不想自己撰寫驗證程式</h2>
 		<ol><li class="next">
 			可以考慮使用
 			<ol>
