@@ -455,6 +455,23 @@
 		<li class="next"><a href="https://jwt.io/">JWT</a></li>
 	</section>
 	<section class="slide">
+		<h2>讓 Error 的 API Response 也是 Json 格式</h2>
+		<pre class="next">
+			<code>namespace App\Exceptions;</code>
+			<code>class Handler extends ExceptionHandler</code>
+			<code>{</code>
+			<code>	public function render($request, Exception $exception)</code>
+			<code>	{</code>
+			<code>	  if ($request->expectsJson()) {</code>
+			<code>        return response()->json(['error' => $exception->getMessage()], 500);</code>
+			<code>    }</code>
+			<code>  </code>
+			<code>    return parent::render($request, $exception);</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+	<section class="slide">
 		<figure>
 		    <img class="cover" src="./pictures/apiLogin_2.jpg">
 		    <figcaption class="black">
@@ -484,21 +501,34 @@
 		<h2>撰寫 Middleware</h2>
 		<code>php artisan make:middleware JWTAuthentication</code>
 		<pre class="next">
-			<code>namespace App\Http\Middleware;</code>
-			<code>use JWTAuth;</code>
-			<code>use Throwable;</code>
-			<code>class JWTAuthentication</code>
+                    <code>namespace App\Http\Middleware;</code>
+                    <code>use JWTAuth;</code>
+                    <code>use Throwable;</code>
+                    <code>class JWTAuthentication</code>
+                    <code>{</code>
+                    <code>    public function handle($request, Closure $next)</code>
+                    <code>    {</code>
+                    <code>        try {</code>
+                    <code>            JWTAuth::parseToken()->authenticate();</code>
+                    <code>      } catch (Throwable $error) {</code>
+                    <code>          return response()->json(['error' => $error->getMessage()]);</code>
+                    <code>      }</code>
+                    <code> </code>
+                    <code>      return $next($request);</code>
+                    <code>    }</code>
+                    <code>}</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>撰寫 Middleware</h2>
+		<li class="next">記得綁到 Kernal 中</li>
+		<pre class="next">
+			<code>namespace App\Http;</code>
+			<code>class Kernel extends HttpKernel</code>
 			<code>{</code>
-			<code>	public function handle($request, Closure $next)</code>
-    		<code>	{</code>
-        	<code>		try {</code>
-        	<code>			JWTAuth::parseToken()->authenticate();</code>
-        	<code>		} catch (Throwable $error) {</code>
-        	<code>			return response()->json(['error' => $error->getMessage()]);</code>
-        	<code>		}</code>
-			<code> </code>
-        	<code>		return $next($request);</code>
-			<code>	}</code>
+			<code>	protected $routeMiddleware = [</code>
+			<code>		'jwt' => \App\Http\Middleware\JWTAuthentication::class</code>
+			<code>	];</code>
 			<code>}</code>
 		</pre>
 	</section>
