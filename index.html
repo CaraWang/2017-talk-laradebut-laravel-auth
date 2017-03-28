@@ -61,7 +61,8 @@
 		<div class="authorDesc">
 			<h2>PHP Developer</h2>
 			<ol>
-				<li class="next">2014/09 ~ now</li>
+				<li>2014/09 ~ now</li>
+				<li class="next">2015/09 ~ now: Laravel</li>
 			</ol>
 		</div>
 		<style>
@@ -75,6 +76,7 @@
 		<li class="next">註冊</li>
 		<li class="next">登入 / 登出</li>
 		<li class="next">記得我</li>
+		<li class="next">其他: email 驗證 / 忘記密碼 等等...</li>
 	</section>
 	<section class="slide">
 		<h2>兩種架構</h2>
@@ -217,7 +219,7 @@
 		</ol>
 		<ol>
 			<li class="next">
-				登入 / 註冊
+				登入 / 登出
 				<ol>
 					<li class="next">Server Based Authentication: <span class="next">後端利用 Session + Cookies 記錄使用者狀態</span></li>
 					<li class="next">Token Based Authentication: <span class="next">前端取得 Authorization Header 告知後端使用者狀態</span></li>
@@ -455,6 +457,23 @@
 		<li class="next"><a href="https://jwt.io/">JWT</a></li>
 	</section>
 	<section class="slide">
+		<h2>讓 Error 的 API Response 也是 Json 格式</h2>
+		<pre class="next">
+			<code>namespace App\Exceptions;</code>
+			<code>class Handler extends ExceptionHandler</code>
+			<code>{</code>
+			<code>	public function render($request, Exception $exception)</code>
+			<code>	{</code>
+			<code>	    if ($request->expectsJson()) {</code>
+			<code>          return response()->json(['error' => $exception->getMessage()], 500);</code>
+			<code>	    }</code>
+			<code>  </code>
+			<code>      return parent::render($request, $exception);</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+	<section class="slide">
 		<figure>
 		    <img class="cover" src="./pictures/apiLogin_2.jpg">
 		    <figcaption class="black">
@@ -484,21 +503,34 @@
 		<h2>撰寫 Middleware</h2>
 		<code>php artisan make:middleware JWTAuthentication</code>
 		<pre class="next">
-			<code>namespace App\Http\Middleware;</code>
-			<code>use JWTAuth;</code>
-			<code>use Throwable;</code>
-			<code>class JWTAuthentication</code>
+                    <code>namespace App\Http\Middleware;</code>
+                    <code>use JWTAuth;</code>
+                    <code>use Throwable;</code>
+                    <code>class JWTAuthentication</code>
+                    <code>{</code>
+                    <code>    public function handle($request, Closure $next)</code>
+                    <code>    {</code>
+                    <code>        try {</code>
+                    <code>            JWTAuth::parseToken()->authenticate();</code>
+                    <code>      } catch (Throwable $error) {</code>
+                    <code>          return response()->json(['error' => $error->getMessage()]);</code>
+                    <code>      }</code>
+                    <code> </code>
+                    <code>      return $next($request);</code>
+                    <code>    }</code>
+                    <code>}</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>撰寫 Middleware</h2>
+		<li class="next">記得綁到 Kernal 中</li>
+		<pre class="next">
+			<code>namespace App\Http;</code>
+			<code>class Kernel extends HttpKernel</code>
 			<code>{</code>
-			<code>	public function handle($request, Closure $next)</code>
-    		<code>	{</code>
-        	<code>		try {</code>
-        	<code>			JWTAuth::parseToken()->authenticate();</code>
-        	<code>		} catch (Throwable $error) {</code>
-        	<code>			return response()->json(['error' => $error->getMessage()]);</code>
-        	<code>		}</code>
-			<code> </code>
-        	<code>		return $next($request);</code>
-			<code>	}</code>
+			<code>	protected $routeMiddleware = [</code>
+			<code>		'jwt' => \App\Http\Middleware\JWTAuthentication::class</code>
+			<code>	];</code>
 			<code>}</code>
 		</pre>
 	</section>
@@ -570,7 +602,7 @@
 		</style>
 	</section>
 	<p class="badge">
-		<a href="">Fork me on GitHub</a>
+		<a href="https://github.com/CaraWang/2017-talk-laradebut-laravel-auth">Fork me on GitHub</a>
 	</p>
 	<div class="progress"></div>
 	<script src="node_modules/shower-core/shower.min.js"></script>
