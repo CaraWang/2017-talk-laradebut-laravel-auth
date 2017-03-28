@@ -61,7 +61,8 @@
 		<div class="authorDesc">
 			<h2>PHP Developer</h2>
 			<ol>
-				<li class="next">2014/09 ~ now</li>
+				<li>2014/09 ~ now</li>
+				<li class="next">2015/09 ~ now: Laravel</li>
 			</ol>
 		</div>
 		<style>
@@ -217,7 +218,7 @@
 		</ol>
 		<ol>
 			<li class="next">
-				登入 / 註冊
+				登入 / 登出
 				<ol>
 					<li class="next">Server Based Authentication: <span class="next">後端利用 Session + Cookies 記錄使用者狀態</span></li>
 					<li class="next">Token Based Authentication: <span class="next">前端取得 Authorization Header 告知後端使用者狀態</span></li>
@@ -462,11 +463,11 @@
 			<code>{</code>
 			<code>	public function render($request, Exception $exception)</code>
 			<code>	{</code>
-			<code>	  if ($request->expectsJson()) {</code>
-			<code>        return response()->json(['error' => $exception->getMessage()], 500);</code>
-			<code>    }</code>
+			<code>	    if ($request->expectsJson()) {</code>
+			<code>          return response()->json(['error' => $exception->getMessage()], 500);</code>
+			<code>	    }</code>
 			<code>  </code>
-			<code>    return parent::render($request, $exception);</code>
+			<code>      return parent::render($request, $exception);</code>
 			<code>	}</code>
 			<code>}</code>
 		</pre>
