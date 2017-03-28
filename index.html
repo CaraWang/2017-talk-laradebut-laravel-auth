@@ -284,10 +284,12 @@
 		<pre class="next">
 			<code>namespace App\Providers;</code>
 			<code>use Illuminate\Support\Facades\Schema;</code>
-			<code>...</code>
-			<code>public function boot()</code>
-			<code>{</code>
-			<code>    <mark>Schema::defaultStringLength(191);</mark></code>
+			<code>class AppServiceProvider extends ServiceProvider</code>
+                        <code>{</code>
+			<code>    public function boot()</code>
+			<code>    {</code>
+			<code>         <mark>Schema::defaultStringLength(191);</mark></code>
+			<code>    }</code>
 			<code>}</code>
 		</pre>
 		<p class="next"> Ref: <a href="https://laravel-news.com/laravel-5-4-key-too-long-error">https://laravel-news.com/laravel-5-4-key-too-long-error</a></p>
@@ -549,7 +551,7 @@
 		<li class="next">靠前端做 Token Refresh</li>
 		<pre class="next">
 			<code>// route/api.php</code>
-			<code>Route::post('/refresh', 'Auth\LoginController@refreshToken');</code>
+			<code>Route::get('/refresh', 'Auth\LoginController@refreshToken');</code>
 		</pre>
 		<pre class="next">
 			<code>public function refreshToken()</code>
